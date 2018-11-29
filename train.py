@@ -61,7 +61,6 @@ parser.add_argument('--input_keep_prob', type=float, default=1.0,
 args = parser.parse_args()
 
 
-
 def train(args):
     data_loader = TextLoader(args.data_dir, args.batch_size, args.seq_length)
     args.vocab_size = data_loader.vocab_size

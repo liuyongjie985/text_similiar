@@ -4,6 +4,7 @@ import collections
 from six.moves import cPickle
 import numpy as np
 import random
+import traceback
 
 
 class TextLoader():
@@ -143,13 +144,24 @@ class TextLoader():
                                   self.num_batches, 0)
 
     def next_batch(self):
-        x1, x2, y = self.x1_batches[self.pointer_list[self.pointer]], self.x2_batches[self.pointer_list[self.pointer]], \
-                    self.y_batches[self.pointer_list[self.pointer]]
-        self.pointer += 1
+        print("len(self.pointer) is " + str(len(self.x1_batches)))
+        print("now this self.pointer is " + str(self.pointer))
+        try:
+            x1, x2, y = self.x1_batches[self.pointer_list[self.pointer]], self.x2_batches[
+                self.pointer_list[self.pointer]], \
+                        self.y_batches[self.pointer_list[self.pointer]]
+        except:
+            traceback.print_exc()
+            print("self.pointer is " + str(self.pointer))
+            print("self.pointer_list[self.pointer] is " + str(self.pointer_list[self.pointer]))
+        self.i += 1
+        if self.i < self.num_batches:
+            self.pointer = self.pointer_list[self.i]
         return x1, x2, y
 
     def reset_batch_pointer(self):
         temp = list(range(0, self.num_batches))
         random.shuffle(temp)
+        self.i = 0
         self.pointer_list = temp
-        self.pointer = self.pointer_list[0]
+        self.pointer = self.pointer_list[self.i]
